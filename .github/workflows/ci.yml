@@ -149,7 +149,9 @@ jobs:
         fetch-depth: 0
 
     - uses: ilammy/msvc-dev-cmd@v1
-
+      with:
+        arch: x86
+    
     - name: Install Ninja
       run: choco install ninja -y
 
