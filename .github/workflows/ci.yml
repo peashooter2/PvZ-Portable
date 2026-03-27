@@ -140,6 +140,39 @@ jobs:
         name: pvz-portable-windows-msvc-x64
         path: dist/
 
+  build-windows-msvc-x86:
+    name: Build for Windows (MSVC x86)
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+
+    - uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Install Ninja
+      run: choco install ninja -y
+
+    - name: Setup vcpkg (manifest mode)
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgJsonGlob: vcpkg.json
+
+    - name: Compile PvZ-Portable for Windows (MSVC)
+      shell: pwsh
+      run: |
+        cmake -G "Ninja" -B build_x86 -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x86-windows-static
+        cmake --build build_x86
+
+        New-Item -ItemType Directory -Force -Path dist | Out-Null
+        Copy-Item build_x86/pvz-portable.exe dist/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v7
+      with:
+        name: pvz-portable-windows-msvc-x86
+        path: dist/
+
   # build-switch:
   #   name: Build for Switch
   #   runs-on: ubuntu-latest
@@ -260,7 +293,7 @@ jobs:
           SDL2_TAG="2.32.10" # Fallback to a known stable version if tag retrieval fails
         fi
         echo "Using SDL2 version: $SDL2_TAG"
-        wget -q "https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_TAG}/SDL2-${SDL2_TAG}.tar.gz"
+        wget -q "https://bgithub.xyz/libsdl-org/SDL/releases/download/release-${SDL2_TAG}/SDL2-${SDL2_TAG}.tar.gz"
         tar xf "SDL2-${SDL2_TAG}.tar.gz"
         mv "SDL2-${SDL2_TAG}" sdl2-src
 
