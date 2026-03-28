@@ -295,7 +295,7 @@ jobs:
           SDL2_TAG="2.32.10" # Fallback to a known stable version if tag retrieval fails
         fi
         echo "Using SDL2 version: $SDL2_TAG"
-        wget -q "https://bgithub.xyz/libsdl-org/SDL/releases/download/release-${SDL2_TAG}/SDL2-${SDL2_TAG}.tar.gz"
+        wget -q "https://github.com/libsdl-org/SDL/releases/download/release-${SDL2_TAG}/SDL2-${SDL2_TAG}.tar.gz"
         tar xf "SDL2-${SDL2_TAG}.tar.gz"
         mv "SDL2-${SDL2_TAG}" sdl2-src
 
