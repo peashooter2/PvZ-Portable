@@ -51,7 +51,7 @@ jobs:
       run: |
         sudo -u builder bash -lc '
           mkdir build
-          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DPVZ_DEBUG=ON
           cmake --build build
 
           mkdir -p dist
@@ -94,7 +94,7 @@ jobs:
       shell: msys2 {0}
       run: |
         mkdir build
-        cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DBUILD_STATIC=ON -DCMAKE_COLOR_DIAGNOSTICS=ON
+        cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DPVZ_DEBUG=ON -DBUILD_STATIC=ON -DCMAKE_COLOR_DIAGNOSTICS=ON
         cmake --build build
         
         mkdir -p dist
@@ -128,7 +128,7 @@ jobs:
     - name: Compile PvZ-Portable for Windows (MSVC)
       shell: pwsh
       run: |
-        cmake -G "Ninja" -B build -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static
+        cmake -G "Ninja" -B build -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DPVZ_DEBUG=ON -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static
         cmake --build build
 
         New-Item -ItemType Directory -Force -Path dist | Out-Null
@@ -163,7 +163,7 @@ jobs:
     - name: Compile PvZ-Portable for Windows (MSVC)
       shell: pwsh
       run: |
-        cmake -G "Ninja" -B build_x86 -DCMAKE_BUILD_TYPE=Release -DCONSOLE=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x86-windows-static
+        cmake -G "Ninja" -B build_x86 -DCMAKE_BUILD_TYPE=Release -DPVZ_DEBUG=ON -DCONSOLE=OFF -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x86-windows-static
         cmake --build build_x86
 
         New-Item -ItemType Directory -Force -Path dist | Out-Null
@@ -236,7 +236,7 @@ jobs:
     - name: Build PvZ-Portable
       run: |
         mkdir build
-        cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+        cmake -G Ninja -B build -DPVZ_DEBUG=ON -DCMAKE_BUILD_TYPE=Release
         cmake --build build
 
         mkdir -p dist
@@ -335,6 +335,7 @@ jobs:
           -DANDROID_ABI=$ABI \
           -DANDROID_PLATFORM=android-$ANDROID_API \
           -DSDL2_DIR=$SDL2_PREFIX/lib/cmake/SDL2 \
+          -DPVZ_DEBUG=ON \
           -DCMAKE_BUILD_TYPE=Release
 
         cmake --build $BUILD_DIR -j$(nproc)
@@ -408,6 +409,7 @@ jobs:
           -DCMAKE_SYSTEM_NAME=iOS \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=$IOS_DEPLOY_TARGET \
           -DCMAKE_OSX_ARCHITECTURES=arm64 \
+          -DPVZ_DEBUG=ON \
           -DCMAKE_BUILD_TYPE=Release \
           -G Xcode
 
@@ -474,7 +476,7 @@ jobs:
     - name: Build PvZ-Portable for WebAssembly
       run: |
         mkdir build-wasm
-        emcmake cmake -G Ninja -B build-wasm -DCMAKE_BUILD_TYPE=Release -DLIMBO_PAGE=OFF
+        emcmake cmake -G Ninja -B build-wasm -DCMAKE_BUILD_TYPE=Release -DPVZ_DEBUG=ON -DLIMBO_PAGE=OFF
         cmake --build build-wasm -j$(nproc)
 
     - name: Upload Artifact
